@@ -1,3 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+using Task_6.dabases;
+using Task_6.Services;
+using Task_6.Services.Interfaces;
+
 namespace Task_6
 {
     public class Program
@@ -8,6 +13,12 @@ namespace Task_6
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+
+            var connectionString = builder.Configuration.GetConnectionString("Picture") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddDbContext<PictureDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<IPictureService, PictureService>();
 
             var app = builder.Build();
 
