@@ -1,13 +1,23 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/drawingHub").build();
+var stage = new Konva.Stage({
+    container: 'konva-container',
+    width: window.innerWidth,
+    height: window.innerHeight,
+});
 
+var layer = new Konva.Layer();
+stage.add(layer);
+
+var isDrawing = false;
+var currentLine;
 connection.start().then(function () {
     console.log("SignalR Connected!");
 }).catch(function (err) {
     return console.error(err.toString());
 });
 
-connection.on("ReceiveDrawing", function (data) {
-    displayDrawing(data);
+connection.on("ReceiveDrawing", function (data) {;
+    displayDrawing(data, layer);
 });
 
 
@@ -20,31 +30,30 @@ function uploadPicture() {
     fetch('/Home/GetDrawing?id=1') 
         .then(response => response.json())
         .then(data => {
-            displayDrawing(data);
+            displayDrawing(data, layer);
         })
         .catch(error => {
             console.error('Error uploading picture:', error);
         });
 }
 
-function displayDrawing(jsonData) {
+function displayDrawing(jsonData, layer) {
+    if (!layer) {
+        console.error('Layer is undefined or null.');
+        return;
+    }
+
     var layerData = JSON.parse(jsonData);
+    
+    layer.destroyChildren();
 
-    var stage = new Konva.Stage({
-        container: 'konva-container',
-        width: window.innerWidth,
-        height: window.innerHeight,
-    });
-
-    var layer = new Konva.Layer();
-    stage.add(layer);
     layerData.forEach(function (item) {
         var node;
 
         if (item.type === 'Line') {
             node = new Konva.Line(item.attrs);
         }
-
+        
         layer.add(node);
     });
     
@@ -70,25 +79,19 @@ function saveDrawing() {
         .then(response => response.json())
         .then(data => {
             console.log('Drawing saved successfully:', data);
+            layer.batchDraw();
         })
         .catch(error => {
             console.error('Error saving drawing:', error);
         });
 
     connection.invoke("SendDrawing", JSON.stringify(layerData));
+    
+
 }
 
-var stage = new Konva.Stage({
-    container: 'konva-container',
-    width: window.innerWidth,
-    height: window.innerHeight,
-});
 
-var layer = new Konva.Layer();
-stage.add(layer);
 
-var isDrawing = false;
-var currentLine;
 
 stage.on('mousedown touchstart', function (e) {
     isDrawing = true;

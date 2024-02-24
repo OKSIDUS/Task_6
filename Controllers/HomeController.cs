@@ -31,7 +31,7 @@ namespace Task_6.Controllers
             try
             {
                 string data = layerData.ToString();
-               // service.SavePicture(data);
+                //service.SavePicture(data);
                 await hubContext.Clients.All.SendAsync("ReceiveDrawing",data);
                 return Json(new { success = true, message = "Drawing saved successfully" });
             }
