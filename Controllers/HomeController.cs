@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
 using Task_6.Models;
+using Task_6.Services;
 using Task_6.Services.Interfaces;
 
 namespace Task_6.Controllers
@@ -10,9 +13,11 @@ namespace Task_6.Controllers
     public class HomeController : Controller
     {
         private readonly IPictureService service;
-        public HomeController(IPictureService service)
+        private readonly IHubContext<DrawingHub> hubContext;
+        public HomeController(IPictureService service, IHubContext<DrawingHub> hubContext)
         {
             this.service = service;
+            this.hubContext = hubContext;
         }
 
         public IActionResult Index()
@@ -21,12 +26,13 @@ namespace Task_6.Controllers
         }
 
         [HttpPost]
-        public IActionResult SaveDrawing([FromBody] JsonArray layerData)
+        public async Task<IActionResult> SaveDrawing([FromBody] JsonArray layerData)
         {
             try
             {
                 string data = layerData.ToString();
                // service.SavePicture(data);
+                await hubContext.Clients.All.SendAsync("ReceiveDrawing",data);
                 return Json(new { success = true, message = "Drawing saved successfully" });
             }
             catch (Exception ex)

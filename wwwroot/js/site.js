@@ -1,4 +1,18 @@
-﻿document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
+﻿var connection = new signalR.HubConnectionBuilder().withUrl("/drawingHub").build();
+
+connection.start().then(function () {
+    console.log("SignalR Connected!");
+}).catch(function (err) {
+    return console.error(err.toString());
+});
+
+connection.on("ReceiveDrawing", function (data) {
+    displayDrawing(data);
+});
+
+
+
+document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
 
 document.getElementById('uploadPicture').addEventListener('click', uploadPicture);
 
@@ -60,6 +74,8 @@ function saveDrawing() {
         .catch(error => {
             console.error('Error saving drawing:', error);
         });
+
+    connection.invoke("SendDrawing", JSON.stringify(layerData));
 }
 
 var stage = new Konva.Stage({

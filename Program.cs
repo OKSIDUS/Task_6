@@ -19,6 +19,9 @@ namespace Task_6
                 options.UseSqlServer(connectionString));
 
             builder.Services.AddScoped<IPictureService, PictureService>();
+            builder.Services.AddSignalR();
+
+
 
             var app = builder.Build();
 
@@ -40,6 +43,12 @@ namespace Task_6
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHub<DrawingHub>("/drawingHub");
+                endpoints.MapControllers();
+            });
 
             app.Run();
         }
