@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using System.Text.Json.Nodes;
-using Task_6.Models;
 using Task_6.Services;
 using Task_6.Services.Interfaces;
 
@@ -27,12 +23,13 @@ namespace Task_6.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> SaveDrawing([FromBody] JsonArray layerData)
+        public async Task<IActionResult> SaveDrawing([FromBody] JsonArray layerData, int id)
         {
             try
             {
+                TempData.TryGetValue("id", out var idPicture);
                 string data = layerData.ToString();
-                //service.SavePicture(data);
+                await service.SavePictureAsync(data, (int)idPicture!);
                 await hubContext.Clients.All.SendAsync("ReceiveDrawing",data);
                 return Json(new { success = true, message = "Drawing saved successfully" });
             }
@@ -52,7 +49,7 @@ namespace Task_6.Controllers
         public async Task<IActionResult> GetDrawing(int id)
         {
             var drawing = await service.GetPictureDataAsync(id);
-
+            TempData["id"] = id;
             if (drawing == null)
             {
                 return NotFound();

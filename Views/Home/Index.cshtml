@@ -15,9 +15,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.JsonData)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -26,9 +23,6 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.JsonData)
             </td>
             <td>
                 @Html.ActionLink("Edit", "DrawingPage", new { id=item.Id }) |
