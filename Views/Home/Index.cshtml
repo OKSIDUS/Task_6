@@ -1,14 +1,41 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model IEnumerable<Task_6.Models.PictureModel>
+
+@{
+    ViewData["Title"] = "Index";
 }
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12" id="konva-container" style="height: 100%; width: 100%">
-        </div>
-        <button id="saveDrawingButton">Save Drawing</button>
-    </div>
-    <button id="uploadPicture">Upload Image</button>
-</div>
 
-<script type="module" src="~/js/site.js" asp-append-version="true"></script>
+<h1>Index</h1>
 
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.JsonData)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.JsonData)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "DrawingPage", new { id=item.Id }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

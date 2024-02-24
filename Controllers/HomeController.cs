@@ -20,9 +20,10 @@ namespace Task_6.Controllers
             this.hubContext = hubContext;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var pictures = await service.GetPicturesAsync();
+            return View(pictures);
         }
 
         [HttpPost]
@@ -41,21 +42,16 @@ namespace Task_6.Controllers
             }
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> DrawingPage(int id)
         {
+            TempData["id"] = id;
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
-
         [HttpGet]
-        public IActionResult GetDrawing(int id)
+        public async Task<IActionResult> GetDrawing(int id)
         {
-            var drawing = service.GetPicture(id);
+            var drawing = await service.GetPictureDataAsync(id);
 
             if (drawing == null)
             {

@@ -16,6 +16,9 @@ connection.start().then(function () {
     return console.error(err.toString());
 });
 
+var id = document.getElementById('fieldId').value;
+uploadPicture();
+
 connection.on("ReceiveDrawing", function (data) {;
     displayDrawing(data, layer);
 });
@@ -24,13 +27,16 @@ connection.on("ReceiveDrawing", function (data) {;
 
 document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
 
-document.getElementById('uploadPicture').addEventListener('click', uploadPicture);
+document.getElementById('uploadPicture').addEventListener('click', uploadPicture());
 
 function uploadPicture() {
-    fetch('/Home/GetDrawing?id=1') 
+    fetch('/Home/GetDrawing?id='+id) 
         .then(response => response.json())
         .then(data => {
-            displayDrawing(data, layer);
+            if (typeof data === 'object') {
+                data = JSON.stringify(data);
+            }
+            displayDrawing(data,layer);
         })
         .catch(error => {
             console.error('Error uploading picture:', error);
@@ -38,12 +44,18 @@ function uploadPicture() {
 }
 
 function displayDrawing(jsonData, layer) {
+    //var layer = new Konva.Layer();
     if (!layer) {
         console.error('Layer is undefined or null.');
         return;
     }
 
     var layerData = JSON.parse(jsonData);
+
+    if (!Array.isArray(layerData)) {
+        console.error('Layer data is not an array.');
+        return;
+    }
     
     layer.destroyChildren();
 

@@ -1,4 +1,5 @@
-﻿using Task_6.dabases;
+﻿using Microsoft.EntityFrameworkCore;
+using Task_6.dabases;
 using Task_6.Models;
 using Task_6.Services.Interfaces;
 
@@ -11,31 +12,50 @@ namespace Task_6.Services
         {
             this.dbContext = dbContext;
         }
-        public string GetPicture(int id)
+
+        public async Task AddNewPictureAsync()
+        {
+           await dbContext.AddAsync(new PictureModel());
+           await dbContext.SaveChangesAsync();
+        }
+
+        public async Task<PictureModel?> GetPictureAsync(int id)
+        {
+            var picture = await dbContext.Pictures.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (picture != null)
+            {
+                return picture;
+            }
+
+            return null;
+        }
+
+        public async Task<string> GetPictureDataAsync(int id)
+        {
+            var picture = await dbContext.Pictures.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (picture != null)
+            {
+                return picture.JsonData;
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<IEnumerable<PictureModel>> GetPicturesAsync()
+        {
+            var pictures = await dbContext.Pictures.ToListAsync();
+            return pictures;
+        }
+
+        public async Task SavePictureAsync(string pictureJson, int id)
         {
             var picture = dbContext.Pictures.Where(p => p.Id == id).FirstOrDefault();
             if (picture != null)
             {
-                return picture!.JsonData;
+                picture.JsonData = pictureJson;
+                dbContext.Update(picture);
+                await dbContext.SaveChangesAsync();
             }
-
-            return null;
-
-        }
-
-        public void SavePicture(string pictureJson)
-        {
-            if (pictureJson != null)
-            {
-                PictureModel picture = new PictureModel
-                {
-                    JsonData = pictureJson
-                };
-
-                dbContext.Add(picture);
-                dbContext.SaveChanges();
-            }
-            
         }
     }
 }

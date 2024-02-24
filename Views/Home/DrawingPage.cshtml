@@ -1,0 +1,18 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    
+}
+<input type="hidden" name="fieldName" id="fieldId" value="@TempData["id"]">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12" id="konva-container" style="height: 100%; width: 100%">
+        </div>
+        <button id="saveDrawingButton">Save Drawing</button>
+    </div>
+    <button id="uploadPicture">Upload Image</button>
+</div>
+
+
+
+<script type="module" src="~/js/site.js" asp-append-version="true"></script>
+
