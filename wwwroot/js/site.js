@@ -1,8 +1,8 @@
 ﻿var connection = new signalR.HubConnectionBuilder().withUrl("/drawingHub").build();
 var stage = new Konva.Stage({
     container: 'konva-container',
-    width: window.innerWidth,
-    height: window.innerHeight,
+    width: window.innerWidth * 0.7,
+    height: window.innerHeight * 0.8,
 });
 
 var layer = new Konva.Layer();
@@ -23,7 +23,11 @@ connection.on("ReceiveDrawing", function (data) {;
     displayDrawing(data, layer);
 });
 
-
+document.getElementById('clearButton').addEventListener('click', function () {
+    layer.destroyChildren();
+    layer.batchDraw();
+    saveDrawing();
+});
 
 document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
 
@@ -103,14 +107,19 @@ function saveDrawing() {
 }
 
 
-
+var colorPicker = document.getElementById('colorPicker');
+var color = colorPicker.value;
+colorPicker.addEventListener('change', function () {
+    color = colorPicker.value; 
+});
 
 stage.on('mousedown touchstart', function (e) {
     isDrawing = true;
+    console.log(color);
     var pos = stage.getPointerPosition();
     currentLine = new Konva.Line({
         points: [pos.x, pos.y],
-        stroke: 'black',
+        stroke: color,
         strokeWidth: 5,
         lineCap: 'round',
         lineJoin: 'round',
@@ -130,5 +139,6 @@ stage.on('mousemove touchmove', function () {
 
 stage.on('mouseup touchend', function () {
     isDrawing = false;
+    saveDrawing();
 });
 

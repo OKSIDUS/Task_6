@@ -31,6 +31,7 @@ namespace Task_6.Controllers
                 string data = layerData.ToString();
                 await service.SavePictureAsync(data, (int)idPicture!);
                 await hubContext.Clients.All.SendAsync("ReceiveDrawing",data);
+                TempData["id"] = idPicture;
                 return Json(new { success = true, message = "Drawing saved successfully" });
             }
             catch (Exception ex)
@@ -56,6 +57,21 @@ namespace Task_6.Controllers
             }
 
             return Json(drawing);
+        }
+
+        public async Task<IActionResult> Create()
+        {
+            await service.AddNewPictureAsync();
+            var pictures = await service.GetPicturesAsync();
+            var picture = pictures.LastOrDefault();
+            if(picture != null)
+            {
+                TempData["id"] = picture.Id;
+                return RedirectToAction("DrawingPage", new { id = picture.Id });
+            }
+
+            return RedirectToAction("Index");
+
         }
     }
 }

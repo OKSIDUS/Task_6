@@ -4,6 +4,6 @@
     {
         public int Id { get; set; }
 
-        public string JsonData { get; set; }
+        public string JsonData { get; set; } = string.Empty;
     }
 }
