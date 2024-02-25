@@ -5,5 +5,7 @@
         public int Id { get; set; }
 
         public string JsonData { get; set; } = string.Empty;
+
+        public string CreatedBy { get; set; } = "unnamed";
     }
 }

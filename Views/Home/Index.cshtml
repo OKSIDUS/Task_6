@@ -15,6 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Id)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +26,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.CreatedBy)
             </td>
             <td>
                 @Html.ActionLink("Edit", "DrawingPage", new { id=item.Id }) |
