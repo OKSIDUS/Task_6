@@ -21,6 +21,8 @@ namespace Task_6
             builder.Services.AddScoped<IPictureService, PictureService>();
             builder.Services.AddSignalR();
 
+            builder.Services.AddSession();
+
 
 
             var app = builder.Build();
@@ -37,6 +39,7 @@ namespace Task_6
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseSession();
 
             app.UseAuthorization();
 
@@ -49,6 +52,8 @@ namespace Task_6
                 endpoints.MapHub<DrawingHub>("/drawingHub");
                 endpoints.MapControllers();
             });
+
+            
 
             app.Run();
         }
