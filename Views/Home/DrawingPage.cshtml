@@ -6,15 +6,15 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3">
-            <button id="saveDrawingButton">Save Drawing</button>
-            <button id="uploadPicture">Upload Image</button>
+        <div class="col-md-3 bg-light">
             <input type="hidden" name="fieldName" id="fieldId" value="@TempData["id"]">
-            <label for="colorPicker">Select Color</label>
+            <label for="colorPicker" class="form-label">Select Color</label>
             <input type="color" class="form-control-color" id="colorPicker" value="black" />
-            <button class="btn" id="clearButton">Clear All</button>
+            <div class="row">
+                <button class="btn-danger" id="clearButton">Clear All</button>
+            </div>
         </div>
-
+        
         <div class="col-md-9">
             <div id="konva-container">
             </div>
