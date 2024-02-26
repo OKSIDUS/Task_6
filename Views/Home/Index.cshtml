@@ -2,12 +2,13 @@
 
 @{
     ViewData["Title"] = "Index";
+    var userName = @TempData["userName"] ?? "unnamed";
 }
 
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create" asp-route-username="@userName">Create New</a>
 </p>
 <table class="table">
     <thead>
@@ -33,9 +34,57 @@
             <td>
                 @Html.ActionLink("Edit", "DrawingPage", new { id=item.Id }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new {  id=item.Id })
             </td>
         </tr>
 }
     </tbody>
 </table>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var name = '@TempData["userName"]';
+        console.log(name);
+        if (name == null || name.length < 1){
+        openPopup();
+        }
+        
+    });
+
+    function openPopup() {
+        document.getElementById('nicknameModal').style.display = 'block';
+    }
+
+    function closePopup() {
+        var nameValue = document.getElementById('nickname').value;
+        document.getElementById('nicknameModal').style.display = 'none';
+
+        document.getElementById('myForm').submit();
+
+        
+    }
+</script>
+<div class="modal" id="nicknameModal">
+    <form action="SetName" method="post" id="myForm">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h4 class="modal-title">Enter your user name</h4>
+                <button type="button" class="close" data-dismiss="modal" onclick="closePopup()">&times;</button>
+            </div>
+
+            <div class="modal-body">
+                
+                    <div class="form-group">
+                        <label for="nickname">User Name:</label>
+                        <input type="text" class="form-control" name="userName" id="nickname" value=@userName placeholder="Enter your user name">
+                    </div>
+                    <button type="submit" class="btn btn-primary" data-dismiss="modal" onclick="closePopup()">Save</button>
+                
+            </div>
+
+        </div>
+    </div>
+    </form>
+</div>

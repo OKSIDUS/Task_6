@@ -13,10 +13,23 @@ namespace Task_6.Services
             this.dbContext = dbContext;
         }
 
-        public async Task AddNewPictureAsync()
+        public async Task AddNewPictureAsync(string userName)
         {
-           await dbContext.AddAsync(new PictureModel());
+            await dbContext.AddAsync(new PictureModel
+            {
+                CreatedBy = userName,
+            });
            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeletePictureAsync(int id)
+        {
+            var picture = await dbContext.Pictures.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (picture != null)
+            {
+                dbContext.Pictures.Remove(picture);
+                await dbContext.SaveChangesAsync();
+            }
         }
 
         public async Task<PictureModel?> GetPictureAsync(int id)
