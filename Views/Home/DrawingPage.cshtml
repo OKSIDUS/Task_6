@@ -1,15 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    TempData.TryGetValue("userName", out var data);
-    TempData["userName"] = data;
-
-
+    
 }
 
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-3 bg-light">
+        <div class="col-md-3">
             <button id="saveDrawingButton">Save Drawing</button>
             <button id="uploadPicture">Upload Image</button>
             <input type="hidden" name="fieldName" id="fieldId" value="@TempData["id"]">
@@ -18,8 +15,8 @@
             <button class="btn" id="clearButton">Clear All</button>
         </div>
 
-        <div class="col-md-9 bg-dark">
-            <div class="col-md-3 bg-black" id="konva-container">
+        <div class="col-md-9">
+            <div id="konva-container">
             </div>
         </div>
     </div>

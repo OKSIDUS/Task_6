@@ -18,11 +18,6 @@ namespace Task_6.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userName = @HttpContext.Session.GetString("UserName");
-            if (userName != null)
-            {
-                TempData["userName"] = userName;
-            }
             var pictures = await service.GetPicturesAsync();
             return View(pictures);
         }
@@ -47,11 +42,6 @@ namespace Task_6.Controllers
 
         public async Task<IActionResult> DrawingPage(int id)
         {
-            TempData.TryGetValue("userName", out var data);
-            if(data != null)
-            {
-                TempData["userName"] = data;
-            }
             TempData["id"] = id;
             return View();
         }
@@ -60,8 +50,6 @@ namespace Task_6.Controllers
         public async Task<IActionResult> GetDrawing(int id)
         {
             var drawing = await service.GetPictureDataAsync(id);
-            TempData.TryGetValue("userName", out var data);
-            TempData["userName"] = data;
             TempData["id"] = id;
             if (drawing == null)
             {
@@ -71,10 +59,9 @@ namespace Task_6.Controllers
             return Json(drawing);
         }
 
-        public async Task<IActionResult> Create(string userName)
+        public async Task<IActionResult> Create()
         {
-           // TempData.TryGetValue("userName", out var userName);
-            await service.AddNewPictureAsync(userName);
+            await service.AddNewPictureAsync();
             var pictures = await service.GetPicturesAsync();
             var picture = pictures.LastOrDefault();
             if(picture != null)
@@ -85,19 +72,6 @@ namespace Task_6.Controllers
 
             return RedirectToAction("Index");
 
-        }
-
-        public async Task<IActionResult> Delete(int id)
-        {
-            await service.DeletePictureAsync(id);
-            return RedirectToAction("Index");
-        }
-
-        [HttpPost("SetName")]
-        public IActionResult SetName(string userName)
-        {
-            HttpContext.Session.SetString("UserName", userName);
-            return RedirectToAction("index");
         }
     }
 }

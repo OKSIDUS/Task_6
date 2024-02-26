@@ -7,6 +7,7 @@ var stage = new Konva.Stage({
 
 var layer = new Konva.Layer();
 stage.add(layer);
+
 var isDrawing = false;
 var currentLine;
 connection.start().then(function () {
@@ -47,6 +48,7 @@ function uploadPicture() {
 }
 
 function displayDrawing(jsonData, layer) {
+    //var layer = new Konva.Layer();
     if (!layer) {
         console.error('Layer is undefined or null.');
         return;
@@ -113,6 +115,7 @@ colorPicker.addEventListener('change', function () {
 
 stage.on('mousedown touchstart', function (e) {
     isDrawing = true;
+    console.log(color);
     var pos = stage.getPointerPosition();
     currentLine = new Konva.Line({
         points: [pos.x, pos.y],
