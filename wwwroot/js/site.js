@@ -29,9 +29,9 @@ document.getElementById('clearButton').addEventListener('click', function () {
     saveDrawing();
 });
 
-document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
+//document.getElementById('saveDrawingButton').addEventListener('click', saveDrawing);
 
-document.getElementById('uploadPicture').addEventListener('click', uploadPicture());
+//document.getElementById('uploadPicture').addEventListener('click', uploadPicture());
 
 function uploadPicture() {
     fetch('/Home/GetDrawing?id='+id) 
