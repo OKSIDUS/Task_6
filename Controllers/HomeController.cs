@@ -73,5 +73,13 @@ namespace Task_6.Controllers
             return RedirectToAction("Index");
 
         }
+
+
+        public async Task<IActionResult> Delete(int id)
+        {
+            await service.DeletePictureAsync(id);
+
+            return RedirectToAction("Index");
+        }
     }
 }

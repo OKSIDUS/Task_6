@@ -19,6 +19,16 @@ namespace Task_6.Services
            await dbContext.SaveChangesAsync();
         }
 
+        public async Task DeletePictureAsync(int id)
+        {
+            var picture = await dbContext.Pictures.Where(p => p.Id == id).FirstOrDefaultAsync();
+            if (picture != null)
+            {
+                dbContext.Pictures.Remove(picture);
+                dbContext.SaveChanges();
+            }
+        }
+
         public async Task<PictureModel?> GetPictureAsync(int id)
         {
             var picture = await dbContext.Pictures.Where(p => p.Id == id).FirstOrDefaultAsync();

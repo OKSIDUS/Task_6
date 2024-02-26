@@ -13,5 +13,7 @@ namespace Task_6.Services.Interfaces
 
         public Task<string> GetPictureDataAsync(int id);
         public Task SavePictureAsync(string pictureJson, int id);
+
+        public Task DeletePictureAsync(int id);
     }
 }
